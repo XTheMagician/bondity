@@ -1,6 +1,7 @@
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import ProfileForm from "@/components/ProfileForm"
 import FileUpload from "@/features/jobs/components/FileUpload"
+import PrinterList from "@/features/jobs/components/PrinterList"
 
 export default function DashboardPage() {
   const { user } = useAuth()
@@ -13,6 +14,7 @@ export default function DashboardPage() {
       </div>
       <ProfileForm />
       <FileUpload />
+      <PrinterList />
     </div>
   )
 }
