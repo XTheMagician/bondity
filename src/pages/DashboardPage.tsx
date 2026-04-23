@@ -1,5 +1,6 @@
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import ProfileForm from "@/components/ProfileForm"
+import FileUpload from "@/features/jobs/components/FileUpload"
 
 export default function DashboardPage() {
   const { user } = useAuth()
@@ -11,6 +12,7 @@ export default function DashboardPage() {
         <p className="text-muted-foreground">{user?.email}</p>
       </div>
       <ProfileForm />
+      <FileUpload />
     </div>
   )
 }
