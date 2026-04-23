@@ -5,6 +5,7 @@ import SignupPage from "@/pages/SignupPage"
 import DashboardPage from "@/pages/DashboardPage"
 import NotFoundPage from "@/pages/NotFoundPage"
 import ProtectedRoute from "@/components/ProtectedRoute"
+import AppLayout from "@/layouts/AppLayout"
 
 export default function App() {
   return (
@@ -17,13 +18,14 @@ export default function App() {
 
         {/* Protected routes */}
         <Route
-          path="/dashboard"
           element={
             <ProtectedRoute>
-              <DashboardPage />
+              <AppLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route path="/dashboard" element={<DashboardPage />} />
+        </Route>
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

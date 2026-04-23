@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next"
-import Navbar from "@/components/Navbar"
+import LandingNavbar from "@/components/LandingNavbar.tsx"
 
 export default function LandingPage() {
   const { t } = useTranslation()
 
   return (
     <div className="flex min-h-svh flex-col">
-      <Navbar />
+      <LandingNavbar />
 
       <div className="flex flex-1 flex-col items-center justify-center p-6 text-center">
         <h1 className="text-4xl font-bold tracking-tight">{t("welcome")}</h1>

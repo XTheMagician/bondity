@@ -2,15 +2,13 @@ import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import ThemeToggle from "@/components/ThemeToggle"
-import { useTheme } from "@/components/theme-provider"
-import { Moon, Sun } from "lucide-react"
 
 const languages = [
   { code: "en", label: "English" },
   { code: "de", label: "Deutsch" },
 ]
 
-export default function Navbar() {
+export default function LandingNavbar() {
   const { i18n } = useTranslation()
 
   return (
@@ -25,7 +23,7 @@ export default function Navbar() {
           <select
             value={i18n.language}
             onChange={(e) => i18n.changeLanguage(e.target.value)}
-            className="rounded border px-2 py-1 text-sm bg-background text-foreground"
+            className="rounded border bg-background px-2 py-1 text-sm text-foreground"
           >
             {languages.map((lang) => (
               <option key={lang.code} value={lang.code}>

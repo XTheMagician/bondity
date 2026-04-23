@@ -1,25 +1,16 @@
 import { useAuth } from "@/features/auth/hooks/useAuth"
-import { useNavigate } from "react-router-dom"
+import ProfileForm from "@/components/ProfileForm"
 
 export default function DashboardPage() {
-  const { user, signOut } = useAuth()
-  const navigate = useNavigate()
-
-  async function handleSignOut() {
-    await signOut()
-    navigate("/login")
-  }
+  const { user } = useAuth()
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-4 p-6">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
-      <p className="text-muted-foreground">Logged in as {user?.email}</p>
-      <button
-        onClick={handleSignOut}
-        className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-accent"
-      >
-        Sign out
-      </button>
+    <div className="flex flex-col items-center gap-8 p-6 pt-20">
+      <div className="w-full max-w-lg">
+        <h1 className="text-2xl font-bold">Dashboard</h1>
+        <p className="text-muted-foreground">{user?.email}</p>
+      </div>
+      <ProfileForm />
     </div>
   )
 }
