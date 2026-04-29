@@ -21,6 +21,20 @@ export interface PrintSettings {
   resolution?: "draft" | "standard" | "fine"
 }
 
+export const MATERIALS = ["PLA", "PETG", "ABS", "Resin"] as const
+export const COLORS = [
+  "White",
+  "Black",
+  "Gray",
+  "Red",
+  "Blue",
+  "Green",
+  "Yellow",
+] as const
+
+export type Material = (typeof MATERIALS)[number]
+export type Color = (typeof COLORS)[number]
+
 export type JobFilters = {
   status?: JobStatus
   material?: string

@@ -17,7 +17,11 @@ export default function PrinterList({ jobId, onChoose }: Props) {
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
-  const { data, isLoading, isError, error } = usePrinters(filters, sort, page)
+  const { data, isLoading, isError, error } = usePrinters({
+    filters,
+    sort,
+    page,
+  })
 
   const printers = data?.data ?? []
   const total = data?.count ?? 0
