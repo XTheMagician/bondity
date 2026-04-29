@@ -44,8 +44,8 @@ export default function SignupPage() {
         <div className="w-full max-w-sm space-y-4 text-center">
           <h1 className="text-2xl font-bold">Check your email</h1>
           <p className="text-muted-foreground">
-            We sent a confirmation link to <strong>{email}</strong>. Click it to activate your
-            account.
+            We sent a confirmation link to <strong>{email}</strong>. Click it to
+            activate your account.
           </p>
           <Link to="/login" className="text-sm underline underline-offset-4">
             Back to sign in
@@ -71,7 +71,7 @@ export default function SignupPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-md border px-3 py-2 text-sm bg-background"
+              className="w-full rounded-md border bg-background px-3 py-2 text-sm"
             />
           </div>
 
@@ -86,7 +86,7 @@ export default function SignupPage() {
               minLength={6}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-md border px-3 py-2 text-sm bg-background"
+              className="w-full rounded-md border bg-background px-3 py-2 text-sm"
             />
           </div>
 

@@ -1,12 +1,21 @@
 import { useRef, useState } from "react"
-import { uploadPrintFile, updateJobSettings } from "../services/uploadService"
+import { uploadPrintFile } from "../services/uploadService"
+import { createJob, updateJobDetails } from "../services/jobService"
 import { Button } from "@/components/ui/button"
 
 type UploadStatus = "idle" | "uploading" | "success" | "error"
 type SaveStatus = "idle" | "saving" | "saved" | "error"
 
 const MATERIALS = ["PLA", "PETG", "ABS", "Resin"] as const
-const COLORS = ["White", "Black", "Gray", "Red", "Blue", "Green", "Yellow"] as const
+const COLORS = [
+  "White",
+  "Black",
+  "Gray",
+  "Red",
+  "Blue",
+  "Green",
+  "Yellow",
+] as const
 
 type Material = (typeof MATERIALS)[number]
 type Color = (typeof COLORS)[number]
@@ -28,7 +37,11 @@ const COLOR_SURCHARGE: Record<Color, number> = {
   Yellow: 2,
 }
 
-function calcPrice(material: Material, color: Color, fileSizeBytes: number): number {
+function calcPrice(
+  material: Material,
+  color: Color,
+  fileSizeBytes: number
+): number {
   const base = MATERIAL_BASE_PRICE[material]
   const colorExtra = COLOR_SURCHARGE[color]
   const sizeExtra = (fileSizeBytes / (1024 * 1024)) * 0.1
@@ -63,7 +76,8 @@ export default function FileUpload() {
     setErrorMsg(null)
 
     try {
-      const created = await uploadPrintFile(file)
+      const fileUrl = await uploadPrintFile(file)
+      const created = await createJob(fileUrl)
       setJob(created)
       setFileSizeBytes(file.size)
       setUploadStatus("success")
@@ -77,10 +91,10 @@ export default function FileUpload() {
 
   async function handleSaveSettings() {
     if (!job) return
-    const price = calcPrice(material, color, fileSizeBytes)
+    const estimated_price = calcPrice(material, color, fileSizeBytes)
     setSaveStatus("saving")
     try {
-      await updateJobSettings(job.id, { color, material, price })
+      await updateJobSettings(job.id, { color, material, estimated_price })
       setSaveStatus("saved")
     } catch {
       setSaveStatus("error")
@@ -90,11 +104,11 @@ export default function FileUpload() {
   const price = calcPrice(material, color, fileSizeBytes)
 
   return (
-    <div className="w-full max-w-lg rounded-lg border p-6 flex flex-col gap-4">
+    <div className="flex w-full max-w-lg flex-col gap-4 rounded-lg border p-6">
       <h2 className="text-lg font-semibold">Upload Print File</h2>
 
       <div
-        className="flex flex-col items-center justify-center rounded-md border-2 border-dashed p-8 cursor-pointer hover:bg-muted/40 transition-colors"
+        className="flex cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed p-8 transition-colors hover:bg-muted/40"
         onClick={() => inputRef.current?.click()}
       >
         <input
@@ -108,8 +122,10 @@ export default function FileUpload() {
           <p className="text-sm font-medium">{fileName}</p>
         ) : (
           <>
-            <p className="text-sm text-muted-foreground">Click to select an STL file</p>
-            <p className="text-xs text-muted-foreground mt-1">.stl only</p>
+            <p className="text-sm text-muted-foreground">
+              Click to select an STL file
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">.stl only</p>
           </>
         )}
       </div>
@@ -133,11 +149,16 @@ export default function FileUpload() {
             <label className="text-sm font-medium">Material</label>
             <select
               value={material}
-              onChange={(e) => { setMaterial(e.target.value as Material); setSaveStatus("idle") }}
-              className="rounded-md border px-3 py-2 text-sm bg-background"
+              onChange={(e) => {
+                setMaterial(e.target.value as Material)
+                setSaveStatus("idle")
+              }}
+              className="rounded-md border bg-background px-3 py-2 text-sm"
             >
               {MATERIALS.map((m) => (
-                <option key={m} value={m}>{m}</option>
+                <option key={m} value={m}>
+                  {m}
+                </option>
               ))}
             </select>
           </div>
@@ -146,11 +167,16 @@ export default function FileUpload() {
             <label className="text-sm font-medium">Color</label>
             <select
               value={color}
-              onChange={(e) => { setColor(e.target.value as Color); setSaveStatus("idle") }}
-              className="rounded-md border px-3 py-2 text-sm bg-background"
+              onChange={(e) => {
+                setColor(e.target.value as Color)
+                setSaveStatus("idle")
+              }}
+              className="rounded-md border bg-background px-3 py-2 text-sm"
             >
               {COLORS.map((c) => (
-                <option key={c} value={c}>{c}</option>
+                <option key={c} value={c}>
+                  {c}
+                </option>
               ))}
             </select>
           </div>
@@ -164,11 +190,17 @@ export default function FileUpload() {
             onClick={handleSaveSettings}
             disabled={saveStatus === "saving" || saveStatus === "saved"}
           >
-            {saveStatus === "saving" ? "Saving..." : saveStatus === "saved" ? "Saved!" : "Confirm Settings"}
+            {saveStatus === "saving"
+              ? "Saving..."
+              : saveStatus === "saved"
+                ? "Saved!"
+                : "Confirm Settings"}
           </Button>
 
           {saveStatus === "error" && (
-            <p className="text-sm text-destructive">Failed to save settings. Please try again.</p>
+            <p className="text-sm text-destructive">
+              Failed to save settings. Please try again.
+            </p>
           )}
         </div>
       )}

@@ -36,7 +36,7 @@ export default function AppNavbar() {
           <select
             value={i18n.language}
             onChange={(e) => i18n.changeLanguage(e.target.value)}
-            className="rounded border px-2 py-1 text-sm bg-background text-foreground"
+            className="rounded border bg-background px-2 py-1 text-sm text-foreground"
           >
             {languages.map((lang) => (
               <option key={lang.code} value={lang.code}>
@@ -48,7 +48,7 @@ export default function AppNavbar() {
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
               <Button variant="ghost" size="icon" className="rounded-full">
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
                   {userInitial}
                 </span>
               </Button>
@@ -59,13 +59,13 @@ export default function AppNavbar() {
                 sideOffset={8}
                 className="z-50 min-w-48 rounded-md border bg-popover p-1 shadow-md"
               >
-                <div className="px-2 py-1.5 text-xs text-muted-foreground truncate">
+                <div className="truncate px-2 py-1.5 text-xs text-muted-foreground">
                   {user?.email}
                 </div>
                 <DropdownMenu.Separator className="my-1 h-px bg-border" />
                 <DropdownMenu.Item
                   onSelect={handleSignOut}
-                  className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent select-none"
+                  className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none select-none hover:bg-accent"
                 >
                   <LogOut className="h-4 w-4" />
                   Sign out

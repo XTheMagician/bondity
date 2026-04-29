@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { supabase } from "@/lib/supabase"
-import { useAuth } from "@/features/auth/hooks/useAuth"
+import { useMyProfile } from "../hooks/useMyProfile"
+import { useUpdateProfile } from "../hooks/useUpdateProfile"
 import { Button } from "@/components/ui/button"
 
 const profileSchema = z.object({
@@ -13,16 +13,14 @@ const profileSchema = z.object({
     .max(30, "Username must be at most 30 characters"),
   full_name: z.string().max(100, "Full name must be at most 100 characters"),
   bio: z.string().max(300, "Bio must be at most 300 characters"),
-  avatar_url: z.string().url("Must be a valid URL").or(z.literal("")),
+  avatar_url: z.url("Must be a valid URL").or(z.literal("")),
   is_maker: z.boolean(),
 })
 
 type ProfileFormValues = z.infer<typeof profileSchema>
 
 export default function ProfileForm() {
-  const { user } = useAuth()
-  const [fetchLoading, setFetchLoading] = useState(true)
-  const [saveStatus, setSaveStatus] = useState<"idle" | "success" | "error">("idle")
+  const { data: profile, isLoading } = useMyProfile()
 
   const {
     register,
@@ -40,46 +38,30 @@ export default function ProfileForm() {
     },
   })
 
+  // Populate form once profile data arrives
   useEffect(() => {
-    if (!user) return
-
-    supabase
-      .from("profiles")
-      .select("username, full_name, bio, avatar_url, is_maker")
-      .eq("id", user.id)
-      .single()
-      .then(({ data }) => {
-        if (data) {
-          reset({
-            username: data.username ?? "",
-            full_name: data.full_name ?? "",
-            bio: data.bio ?? "",
-            avatar_url: data.avatar_url ?? "",
-            is_maker: data.is_maker ?? false,
-          })
-        }
-        setFetchLoading(false)
+    if (profile) {
+      reset({
+        username: profile.username ?? "",
+        full_name: profile.full_name ?? "",
+        bio: profile.bio ?? "",
+        avatar_url: profile.avatar_url ?? "",
+        is_maker: profile.is_maker ?? false,
       })
-  }, [user, reset])
+    }
+  }, [profile, reset])
 
-  async function onSubmit(values: ProfileFormValues) {
-    if (!user) return
-    setSaveStatus("idle")
+  const { mutateAsync, isSuccess, isError } = useUpdateProfile()
 
-    const { error } = await supabase
-      .from("profiles")
-      .update({ ...values, updated_at: new Date().toISOString() })
-      .eq("id", user.id)
-
-    setSaveStatus(error ? "error" : "success")
-  }
-
-  if (fetchLoading) {
+  if (isLoading) {
     return <p className="text-sm text-muted-foreground">Loading profile…</p>
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-lg space-y-5">
+    <form
+      onSubmit={handleSubmit((values) => mutateAsync(values))}
+      className="w-full max-w-lg space-y-5"
+    >
       <h2 className="text-lg font-semibold">Your Profile</h2>
 
       <div className="space-y-1">
@@ -89,7 +71,7 @@ export default function ProfileForm() {
         <input
           id="username"
           {...register("username")}
-          className="w-full rounded-md border px-3 py-2 text-sm bg-background"
+          className="w-full rounded-md border bg-background px-3 py-2 text-sm"
         />
         {errors.username && (
           <p className="text-xs text-red-500">{errors.username.message}</p>
@@ -103,7 +85,7 @@ export default function ProfileForm() {
         <input
           id="full_name"
           {...register("full_name")}
-          className="w-full rounded-md border px-3 py-2 text-sm bg-background"
+          className="w-full rounded-md border bg-background px-3 py-2 text-sm"
         />
         {errors.full_name && (
           <p className="text-xs text-red-500">{errors.full_name.message}</p>
@@ -118,7 +100,7 @@ export default function ProfileForm() {
           id="bio"
           rows={3}
           {...register("bio")}
-          className="w-full rounded-md border px-3 py-2 text-sm bg-background resize-none"
+          className="w-full resize-none rounded-md border bg-background px-3 py-2 text-sm"
         />
         {errors.bio && (
           <p className="text-xs text-red-500">{errors.bio.message}</p>
@@ -133,7 +115,7 @@ export default function ProfileForm() {
           id="avatar_url"
           {...register("avatar_url")}
           placeholder="https://…"
-          className="w-full rounded-md border px-3 py-2 text-sm bg-background"
+          className="w-full rounded-md border bg-background px-3 py-2 text-sm"
         />
         {errors.avatar_url && (
           <p className="text-xs text-red-500">{errors.avatar_url.message}</p>
@@ -152,10 +134,8 @@ export default function ProfileForm() {
         </label>
       </div>
 
-      {saveStatus === "success" && (
-        <p className="text-sm text-green-600">Profile saved.</p>
-      )}
-      {saveStatus === "error" && (
+      {isSuccess && <p className="text-sm text-green-600">Profile saved.</p>}
+      {isError && (
         <p className="text-sm text-red-500">Something went wrong. Try again.</p>
       )}
 
