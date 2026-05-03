@@ -126,10 +126,7 @@ export default function PrinterList({ jobId, onChoose }: Props) {
                   {printer.model_name}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  {printer.location_city}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {printer.material_types?.join(", ")}
+                  {printer.printer_materials.map((m) => m.material).join(", ")}
                 </p>
               </div>
               {printer.profiles?.avg_rating != null && (

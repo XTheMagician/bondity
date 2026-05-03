@@ -20,18 +20,21 @@ export type Database = {
           id: string
           job_id: string
           printer_id: string
+          status: string
         }
         Insert: {
           created_at?: string
           id?: string
           job_id: string
           printer_id: string
+          status?: string
         }
         Update: {
           created_at?: string
           id?: string
           job_id?: string
           printer_id?: string
+          status?: string
         }
         Relationships: [
           {
@@ -55,6 +58,7 @@ export type Database = {
           color: string | null
           created_at: string | null
           customer_id: string
+          description: string | null
           estimated_price: number | null
           file_url: string | null
           id: string
@@ -64,11 +68,14 @@ export type Database = {
           settings: Json | null
           status: string | null
           target_type: string | null
+          title: string | null
+          updated_at: string | null
         }
         Insert: {
           color?: string | null
           created_at?: string | null
           customer_id?: string
+          description?: string | null
           estimated_price?: number | null
           file_url?: string | null
           id?: string
@@ -78,11 +85,14 @@ export type Database = {
           settings?: Json | null
           status?: string | null
           target_type?: string | null
+          title?: string | null
+          updated_at?: string | null
         }
         Update: {
           color?: string | null
           created_at?: string | null
           customer_id?: string
+          description?: string | null
           estimated_price?: number | null
           file_url?: string | null
           id?: string
@@ -92,6 +102,8 @@ export type Database = {
           settings?: Json | null
           status?: string | null
           target_type?: string | null
+          title?: string | null
+          updated_at?: string | null
         }
         Relationships: [
           {
@@ -110,42 +122,115 @@ export type Database = {
           },
         ]
       }
+      printer_materials: {
+        Row: {
+          available_colors: string[] | null
+          id: string
+          material: string
+          printer_id: string
+        }
+        Insert: {
+          available_colors?: string[] | null
+          id?: string
+          material: string
+          printer_id: string
+        }
+        Update: {
+          available_colors?: string[] | null
+          id?: string
+          material?: string
+          printer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "printer_materials_printer_id_fkey"
+            columns: ["printer_id"]
+            isOneToOne: false
+            referencedRelation: "printers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       printers: {
         Row: {
+          build_volume_x_mm: number | null
+          build_volume_y_mm: number | null
+          build_volume_z_mm: number | null
           created_at: string | null
           description: string | null
           id: string
           is_active: boolean | null
-          location_city: string | null
-          material_types: string[] | null
           model_name: string
+          nozzle_diameter_mm: number | null
           owner_id: string
+          updated_at: string | null
         }
         Insert: {
+          build_volume_x_mm?: number | null
+          build_volume_y_mm?: number | null
+          build_volume_z_mm?: number | null
           created_at?: string | null
           description?: string | null
           id?: string
           is_active?: boolean | null
-          location_city?: string | null
-          material_types?: string[] | null
           model_name: string
+          nozzle_diameter_mm?: number | null
           owner_id: string
+          updated_at?: string | null
         }
         Update: {
+          build_volume_x_mm?: number | null
+          build_volume_y_mm?: number | null
+          build_volume_z_mm?: number | null
           created_at?: string | null
           description?: string | null
           id?: string
           is_active?: boolean | null
-          location_city?: string | null
-          material_types?: string[] | null
           model_name?: string
+          nozzle_diameter_mm?: number | null
           owner_id?: string
+          updated_at?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "printers_owner_id_fkey"
             columns: ["owner_id"]
-            isOneToOne: false
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profile_addresses: {
+        Row: {
+          address_country: string | null
+          address_line: string | null
+          address_postal_code: string | null
+          location_lat: number | null
+          location_lng: number | null
+          profile_id: string
+        }
+        Insert: {
+          address_country?: string | null
+          address_line?: string | null
+          address_postal_code?: string | null
+          location_lat?: number | null
+          location_lng?: number | null
+          profile_id: string
+        }
+        Update: {
+          address_country?: string | null
+          address_line?: string | null
+          address_postal_code?: string | null
+          location_lat?: number | null
+          location_lng?: number | null
+          profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_addresses_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: true
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -156,34 +241,37 @@ export type Database = {
           avatar_url: string | null
           avg_rating: number | null
           bio: string | null
+          created_at: string | null
           full_name: string | null
           id: string
-          is_maker: boolean | null
+          is_maker: boolean
           location_city: string | null
           updated_at: string | null
-          username: string | null
+          username: string
         }
         Insert: {
           avatar_url?: string | null
           avg_rating?: number | null
           bio?: string | null
+          created_at?: string | null
           full_name?: string | null
           id: string
-          is_maker?: boolean | null
+          is_maker?: boolean
           location_city?: string | null
           updated_at?: string | null
-          username?: string | null
+          username: string
         }
         Update: {
           avatar_url?: string | null
           avg_rating?: number | null
           bio?: string | null
+          created_at?: string | null
           full_name?: string | null
           id?: string
-          is_maker?: boolean | null
+          is_maker?: boolean
           location_city?: string | null
           updated_at?: string | null
-          username?: string | null
+          username?: string
         }
         Relationships: []
       }
@@ -337,3 +425,43 @@ export type TablesUpdate<
       ? U
       : never
     : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {},
+  },
+} as const

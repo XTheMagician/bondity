@@ -5,6 +5,8 @@ export type Printer = Tables<"printers">
 export type Profile = Tables<"profiles">
 export type Review = Tables<"reviews">
 export type JobInvitation = Tables<"job_invitations">
+export type PrinterMaterial = Tables<"printer_materials">
+export type ProfileAddress = Tables<"profile_addresses">
 
 export type JobInsert = TablesInsert<"jobs">
 export type JobUpdate = TablesUpdate<"jobs">
@@ -16,6 +18,10 @@ export type ReviewInsert = TablesInsert<"reviews">
 export type ReviewUpdate = TablesUpdate<"reviews">
 export type JobInvitationInsert = TablesInsert<"job_invitations">
 export type JobInvitationUpdate = TablesUpdate<"job_invitations">
+export type PrinterMaterialInsert = TablesInsert<"printer_materials">
+export type PrinterMaterialUpdate = TablesUpdate<"printer_materials">
+export type ProfileAddressInsert = TablesInsert<"profile_addresses">
+export type ProfileAddressUpdate = TablesUpdate<"profile_addresses">
 
 export type PageResponse<T> = {
   data: T[]

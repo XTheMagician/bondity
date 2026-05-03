@@ -16,20 +16,13 @@ export async function listPrinters(
     .select(
       `
       *,
-      profiles!inner (full_name, avg_rating)
+      profiles!inner (full_name, avg_rating),
+      printer_materials (material, available_colors)
     `,
       { count: "exact" }
     )
     .eq("is_active", true)
     .range(from, to)
-
-  if (filters.material) {
-    query = query.contains("material_types", [filters.material])
-  }
-
-  if (filters.city) {
-    query = query.ilike("location_city", `%${filters.city}%`)
-  }
 
   if (filters.minRating != null) {
     query = query.filter("profiles.avg_rating", "gte", filters.minRating)
