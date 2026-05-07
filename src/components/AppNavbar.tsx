@@ -17,6 +17,7 @@ const navLinks = [
   { to: "/home", label: "Home" },
   { to: "/browse", label: "Browse" },
   { to: "/orders", label: "Orders" },
+  { to: "/test", label: "Test" },
 ]
 
 export default function AppNavbar() {

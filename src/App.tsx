@@ -7,6 +7,7 @@ import BrowsePage from "@/pages/BrowsePage"
 import OrdersPage from "@/pages/OrdersPage"
 import AvailableJobsPage from "@/pages/AvailableJobsPage"
 import ProfilePage from "@/pages/ProfilePage"
+import TestPage from "@/pages/TestPage"
 import NotFoundPage from "@/pages/NotFoundPage"
 import ProtectedRoute from "@/components/ProtectedRoute"
 import AppLayout from "@/layouts/AppLayout"
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/available-jobs" element={<AvailableJobsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/test" element={<TestPage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

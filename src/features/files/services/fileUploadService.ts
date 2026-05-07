@@ -16,7 +16,8 @@ export async function uploadStlFile(
     throw new Error("File is too large. Maximum size is 25MB.")
   }
 
-  const { path, publicUrl } = await uploadFile(BUCKET, file)
+  const objectPath = `${ownerId}/${Date.now()}_${file.name}`
+  const { path, publicUrl } = await uploadFile(BUCKET, file, objectPath)
 
   return createFile({
     owner_id: ownerId,
