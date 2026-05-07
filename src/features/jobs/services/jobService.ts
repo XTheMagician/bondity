@@ -9,10 +9,10 @@ import type {
   JobTargetType,
 } from "../types"
 
-export async function createJob(fileUrl: string): Promise<Job> {
+export async function createJob(fileId: string): Promise<Job> {
   const { data, error } = await supabase
     .from("jobs")
-    .insert([{ file_url: fileUrl, status: "draft" satisfies JobStatus }])
+    .insert([{ file_id: fileId, status: "draft" satisfies JobStatus }])
     .select()
     .single()
 

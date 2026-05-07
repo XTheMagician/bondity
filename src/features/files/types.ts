@@ -1,4 +1,15 @@
-export type FileStatus = "published" | "draft"
+import type { Sort } from "@/types"
+
+export type FileStatus = "private" | "draft" | "published"
+
+export type FileFilters = {
+  ownerId?: string
+  status?: FileStatus
+}
+
+export type FileSortField = "created_at"
+
+export type FileSort = Sort<FileSortField>
 
 export type OwnedFile = {
   id: string

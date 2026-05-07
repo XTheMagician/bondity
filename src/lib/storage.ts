@@ -1,6 +1,15 @@
 import { supabase } from "@/lib/supabase"
 
-export async function uploadFile(bucket: string, file: File, path?: string) {
+export type UploadResult = {
+  path: string
+  publicUrl: string
+}
+
+export async function uploadFile(
+  bucket: string,
+  file: File,
+  path?: string
+): Promise<UploadResult> {
   const filePath = path ?? `${Date.now()}_${file.name}`
 
   const { error } = await supabase.storage.from(bucket).upload(filePath, file)
@@ -8,5 +17,5 @@ export async function uploadFile(bucket: string, file: File, path?: string) {
   if (error) throw error
 
   const { data } = supabase.storage.from(bucket).getPublicUrl(filePath)
-  return data.publicUrl
+  return { path: filePath, publicUrl: data.publicUrl }
 }

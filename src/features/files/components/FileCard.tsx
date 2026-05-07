@@ -16,11 +16,22 @@ type FileCardProps =
   | { file: SavedFile }
   | { file: BrowseFile; onBuy?: () => void }
 
+type OwnedProps = Extract<FileCardProps, { file: OwnedFile }>
+type BrowseProps = Extract<FileCardProps, { file: BrowseFile }>
+
+function isOwned(p: FileCardProps): p is OwnedProps {
+  return p.file.source === "uploaded"
+}
+
+function isBrowse(p: FileCardProps): p is BrowseProps {
+  return p.file.source === "browse"
+}
+
 export function FileCard(props: FileCardProps) {
   return (
     <div className="group relative flex flex-col gap-3 rounded-lg border p-3 transition-colors hover:border-border/80 hover:bg-muted/30">
       {/* Owned: edit button on hover */}
-      {props.file.source === "uploaded" && (
+      {isOwned(props) && (
         <button
           className="absolute top-2 right-2 hidden cursor-pointer items-center gap-1 rounded-md border bg-background px-2 py-1 text-[11px] font-medium text-muted-foreground shadow-sm transition-colors group-hover:flex hover:bg-muted hover:text-foreground"
           onClick={props.onEdit}
@@ -102,7 +113,7 @@ export function FileCard(props: FileCardProps) {
           </p>
         )}
 
-        {props.file.source === "browse" && (
+        {isBrowse(props) && (
           <div className="flex items-center justify-between pt-1">
             <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
               <span className="flex items-center gap-0.5">

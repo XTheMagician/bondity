@@ -1,5 +1,6 @@
 import { useRef, useState } from "react"
-import { uploadPrintFile } from "../services/uploadService"
+import { useAuth } from "@/features/auth/hooks/useAuth"
+import { uploadStlFile } from "@/features/files/services/fileUploadService"
 import { createJob } from "../services/jobService"
 import { Button } from "@/components/ui/button"
 
@@ -14,6 +15,7 @@ export default function FileUpload({ onJobCreated }: Props) {
   const [fileName, setFileName] = useState<string | null>(null)
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>("idle")
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const { user } = useAuth()
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0] ?? null
@@ -25,13 +27,18 @@ export default function FileUpload({ onJobCreated }: Props) {
   async function handleUpload() {
     const file = inputRef.current?.files?.[0]
     if (!file) return
+    if (!user) {
+      setUploadStatus("error")
+      setErrorMsg("You must be signed in to upload a file")
+      return
+    }
 
     setUploadStatus("uploading")
     setErrorMsg(null)
 
     try {
-      const fileUrl = await uploadPrintFile(file)
-      const created = await createJob(fileUrl)
+      const fileRow = await uploadStlFile(file, user.id)
+      const created = await createJob(fileRow.id)
       onJobCreated(created.id, file.size)
     } catch (err) {
       setUploadStatus("error")

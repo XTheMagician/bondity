@@ -6,7 +6,7 @@ export function useCreateJob() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (fileUrl: string) => createJob(fileUrl),
+    mutationFn: (fileId: string) => createJob(fileId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: jobQueries.lists() })
     },

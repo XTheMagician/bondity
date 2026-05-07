@@ -18,37 +18,52 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
-          file_url: string
+          file_url: string | null
           id: string
+          mime_type: string | null
           name: string
+          original_filename: string | null
           owner_id: string
           preview_url: string | null
           price: number | null
+          size_bytes: number | null
           status: string
+          storage_bucket: string
+          storage_path: string | null
           updated_at: string
         }
         Insert: {
           created_at?: string
           description?: string | null
-          file_url: string
+          file_url?: string | null
           id?: string
+          mime_type?: string | null
           name: string
+          original_filename?: string | null
           owner_id: string
           preview_url?: string | null
           price?: number | null
+          size_bytes?: number | null
           status?: string
+          storage_bucket?: string
+          storage_path?: string | null
           updated_at?: string
         }
         Update: {
           created_at?: string
           description?: string | null
-          file_url?: string
+          file_url?: string | null
           id?: string
+          mime_type?: string | null
           name?: string
+          original_filename?: string | null
           owner_id?: string
           preview_url?: string | null
           price?: number | null
+          size_bytes?: number | null
           status?: string
+          storage_bucket?: string
+          storage_path?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -107,6 +122,7 @@ export type Database = {
           customer_id: string
           description: string | null
           estimated_price: number | null
+          file_id: string | null
           file_url: string | null
           id: string
           maker_id: string | null
@@ -124,6 +140,7 @@ export type Database = {
           customer_id?: string
           description?: string | null
           estimated_price?: number | null
+          file_id?: string | null
           file_url?: string | null
           id?: string
           maker_id?: string | null
@@ -141,6 +158,7 @@ export type Database = {
           customer_id?: string
           description?: string | null
           estimated_price?: number | null
+          file_id?: string | null
           file_url?: string | null
           id?: string
           maker_id?: string | null
@@ -158,6 +176,13 @@ export type Database = {
             columns: ["customer_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jobs_file_id_fkey"
+            columns: ["file_id"]
+            isOneToOne: false
+            referencedRelation: "files"
             referencedColumns: ["id"]
           },
           {
