@@ -1,3 +1,7 @@
+import type { File as DbFile } from "@/types"
+
+export type JobFile = DbFile
+
 export type FileStatus = "published" | "draft"
 
 export type OwnedFile = {
