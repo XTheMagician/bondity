@@ -30,9 +30,9 @@ export default function FileUpload({ onJobCreated }: Props) {
     setErrorMsg(null)
 
     try {
-      const fileUrl = await uploadPrintFile(file)
-      const created = await createJob(fileUrl)
-      onJobCreated(created.id, file.size)
+      const { fileId, sizeBytes } = await uploadPrintFile(file)
+      const created = await createJob(fileId)
+      onJobCreated(created.id, sizeBytes)
     } catch (err) {
       setUploadStatus("error")
       setErrorMsg(err instanceof Error ? err.message : "Upload failed")
