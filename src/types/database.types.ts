@@ -14,6 +14,53 @@ export type Database = {
   }
   public: {
     Tables: {
+      files: {
+        Row: {
+          created_at: string
+          description: string | null
+          file_url: string
+          id: string
+          name: string
+          owner_id: string
+          preview_url: string | null
+          price: number | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          file_url: string
+          id?: string
+          name: string
+          owner_id: string
+          preview_url?: string | null
+          price?: number | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          file_url?: string
+          id?: string
+          name?: string
+          owner_id?: string
+          preview_url?: string | null
+          price?: number | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "files_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       job_invitations: {
         Row: {
           created_at: string

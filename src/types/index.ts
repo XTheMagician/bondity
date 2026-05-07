@@ -1,5 +1,6 @@
 import type { Tables, TablesInsert, TablesUpdate } from "./database.types"
 
+export type File = Tables<"files">
 export type Job = Tables<"jobs">
 export type Printer = Tables<"printers">
 export type Profile = Tables<"profiles">
@@ -8,6 +9,8 @@ export type JobInvitation = Tables<"job_invitations">
 export type PrinterMaterial = Tables<"printer_materials">
 export type ProfileAddress = Tables<"profile_addresses">
 
+export type FileInsert = TablesInsert<"files">
+export type FileUpdate = TablesUpdate<"files">
 export type JobInsert = TablesInsert<"jobs">
 export type JobUpdate = TablesUpdate<"jobs">
 export type PrinterInsert = TablesInsert<"printers">

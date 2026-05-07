@@ -11,8 +11,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
-  // Already logged in — send to dashboard
-  if (user) return <Navigate to="/dashboard" replace />
+  if (user) return <Navigate to="/home" replace />
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -23,7 +22,7 @@ export default function LoginPage() {
     if (error) {
       setError(error.message)
     } else {
-      navigate("/dashboard")
+      navigate("/home")
     }
 
     setLoading(false)

@@ -1,10 +1,9 @@
 import { useState } from "react"
-import { Link, Navigate, useNavigate } from "react-router-dom"
+import { Link, Navigate } from "react-router-dom"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 
 export default function SignupPage() {
   const { user, signUp, signInWithGoogle } = useAuth()
-  const navigate = useNavigate()
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -12,8 +11,7 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
 
-  // Already logged in — send to dashboard
-  if (user) return <Navigate to="/dashboard" replace />
+  if (user) return <Navigate to="/home" replace />
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

@@ -2,7 +2,11 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import LandingPage from "@/pages/LandingPage"
 import LoginPage from "@/pages/LoginPage"
 import SignupPage from "@/pages/SignupPage"
-import DashboardPage from "@/pages/DashboardPage"
+import HomePage from "@/pages/HomePage"
+import BrowsePage from "@/pages/BrowsePage"
+import OrdersPage from "@/pages/OrdersPage"
+import AvailableJobsPage from "@/pages/AvailableJobsPage"
+import ProfilePage from "@/pages/ProfilePage"
 import NotFoundPage from "@/pages/NotFoundPage"
 import ProtectedRoute from "@/components/ProtectedRoute"
 import AppLayout from "@/layouts/AppLayout"
@@ -24,7 +28,11 @@ export default function App() {
             </ProtectedRoute>
           }
         >
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/browse" element={<BrowsePage />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/available-jobs" element={<AvailableJobsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />
